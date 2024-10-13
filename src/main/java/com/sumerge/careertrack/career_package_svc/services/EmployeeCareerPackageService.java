@@ -50,7 +50,7 @@ public class EmployeeCareerPackageService {
         EmployeeCareerPackage employeeCareerPackage = employeeCareerPackageRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE , packageId));
 
-        employeeCareerPackage.setUrl(employeeCareerPackageRequestDTO.getUrl());
+        employeeCareerPackage.setFileId(employeeCareerPackageRequestDTO.getFileId());
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackageRepository.save(employeeCareerPackage));
     }
 

@@ -18,7 +18,7 @@ public class CareerPackageTemplate {
     private UUID id;
 
     @Column(nullable = false)
-    private String url;
+    private String fileId;
 
     @Column(nullable = false)
     private UUID titleId;

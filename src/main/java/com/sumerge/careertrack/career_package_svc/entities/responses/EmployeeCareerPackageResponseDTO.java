@@ -18,7 +18,7 @@ public class EmployeeCareerPackageResponseDTO {
     private UUID employeeId;
 
     @NonNull
-    private String url;
+    private String fileId;
 
     @NonNull
     private String comment;

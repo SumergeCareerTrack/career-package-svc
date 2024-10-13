@@ -9,12 +9,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CareerPackageTemplateMapper {
 
-    @Mapping(source = "url" , target = "url")
+    @Mapping(source = "fileId" , target = "fileId")
     @Mapping(source = "titleId" , target = "titleId")
     @Mapping(target = "id" , ignore = true)
     CareerPackageTemplate toCarerPackageTemplate(CareerPackageTemplateRequestDTO templateRequestDTO);
 
-    @Mapping(source = "url" , target = "url")
+    @Mapping(source = "fileId" , target = "fileId")
     @Mapping(source = "titleId" , target = "titleId")
     @Mapping(source = "id" ,target = "id")
     CareerPackageTemplateResponseDTO toResponseDTO(CareerPackageTemplate template);

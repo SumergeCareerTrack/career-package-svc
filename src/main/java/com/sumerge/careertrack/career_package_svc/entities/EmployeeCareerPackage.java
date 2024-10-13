@@ -24,7 +24,7 @@ public class EmployeeCareerPackage {
     private UUID employeeId;
 
     @Column(nullable = false)
-    private String url;
+    private String fileId;
 
     @Column(nullable = false)
     @Builder.Default

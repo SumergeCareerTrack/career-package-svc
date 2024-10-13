@@ -14,5 +14,5 @@ public class EmployeeCareerPackageRequestDTO {
     private UUID employeeId;
 
     @NonNull
-    private String url;
+    private String fileId;
 }

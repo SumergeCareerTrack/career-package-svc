@@ -54,7 +54,7 @@ public class CareerPackageTemplateService {
             throw new AlreadyExistException(AlreadyExistException.Title , requestDTO.getTitleId());
         }
 
-        template.setUrl(requestDTO.getUrl());
+        template.setFileId(requestDTO.getFileId());
         template.setTitleId(requestDTO.getTitleId());
 
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));

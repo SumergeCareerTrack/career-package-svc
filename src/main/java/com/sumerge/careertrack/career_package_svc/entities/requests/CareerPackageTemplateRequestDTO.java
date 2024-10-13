@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CareerPackageTemplateRequestDTO {
 
     @NonNull
-    private String url;
+    private String fileId;
 
     @NonNull
     private UUID titleId;

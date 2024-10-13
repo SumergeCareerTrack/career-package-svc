@@ -15,7 +15,7 @@ public class CareerPackageTemplateResponseDTO {
     private UUID id;
 
     @NonNull
-    private String url;
+    private String fileId;
 
     @NonNull
     private UUID titleId;
