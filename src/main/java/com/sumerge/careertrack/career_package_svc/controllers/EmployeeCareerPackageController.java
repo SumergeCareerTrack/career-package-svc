@@ -4,9 +4,12 @@ import com.sumerge.careertrack.career_package_svc.entities.requests.EmployeeCare
 import com.sumerge.careertrack.career_package_svc.entities.responses.EmployeeCareerPackageResponseDTO;
 import com.sumerge.careertrack.career_package_svc.services.EmployeeCareerPackageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,13 +37,17 @@ public class EmployeeCareerPackageController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeCareerPackageResponseDTO> createEmployeeCareerPackage(@RequestBody EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) {
-        return ResponseEntity.ok(employeeCareerPackageService.createEmployeeCareerPackage(employeeCareerPackageRequestDTO));
+    public ResponseEntity<EmployeeCareerPackageResponseDTO> createEmployeeCareerPackage(@RequestParam MultipartFile file ,
+                                                                                        @RequestParam UUID employeeId) throws Exception {
+        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeeId,file);
+        return ResponseEntity.ok(employeeCareerPackageService.createEmployeeCareerPackage(requestDTO));
     }
 
     @PutMapping("/{employeePackageId}")
-    public ResponseEntity<EmployeeCareerPackageResponseDTO> updateEmployeeCareerPackage(@PathVariable UUID employeePackageId, @RequestBody EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) {
-        return ResponseEntity.ok(employeeCareerPackageService.updateEmployeeCareerPackage(employeePackageId , employeeCareerPackageRequestDTO));
+    public ResponseEntity<EmployeeCareerPackageResponseDTO> updateEmployeeCareerPackage(@PathVariable UUID employeePackageId,
+                                                                                        @RequestParam MultipartFile file) throws Exception{
+        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeePackageId,file);
+        return ResponseEntity.ok(employeeCareerPackageService.updateEmployeeCareerPackage(employeePackageId , requestDTO));
     }
 
     @DeleteMapping("/{employeePackageId}")

@@ -19,6 +19,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
+                // Expose the Content-Disposition heade
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll())
                 .sessionManagement(session -> session

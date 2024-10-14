@@ -3,6 +3,7 @@ package com.sumerge.careertrack.career_package_svc.entities.responses;
 import com.sumerge.careertrack.career_package_svc.entities.enums.ApprovalStatus;
 import lombok.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -19,6 +20,9 @@ public class EmployeeCareerPackageResponseDTO {
 
     @NonNull
     private String fileId;
+
+    @NonNull
+    private Date submission_date;
 
     @NonNull
     private String comment;

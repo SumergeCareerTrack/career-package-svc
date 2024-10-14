@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CareerPackageTemplateMapper {
 
-    @Mapping(source = "fileId" , target = "fileId")
+    @Mapping(target = "fileId" , ignore = true)
     @Mapping(source = "titleId" , target = "titleId")
     @Mapping(target = "id" , ignore = true)
     CareerPackageTemplate toCarerPackageTemplate(CareerPackageTemplateRequestDTO templateRequestDTO);

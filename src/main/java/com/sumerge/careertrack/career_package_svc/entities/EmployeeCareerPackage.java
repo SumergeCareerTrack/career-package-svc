@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +30,9 @@ public class EmployeeCareerPackage {
     @Column(nullable = false)
     @Builder.Default
     private String comment = "";
+
+    @Column(nullable = false)
+    private Date submission_date;
 
     @Column(nullable = false)
     @Builder.Default

@@ -10,6 +10,7 @@ import com.sumerge.careertrack.career_package_svc.repositories.EmployeeCareerPac
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class EmployeeCareerPackageService {
 
     private final EmployeeCareerPackageRepository employeeCareerPackageRepository;
     private final EmployeeCareerPackageMapper employeeCareerPackageMapper;
+    private final FileService fileService;
 
     public List<EmployeeCareerPackageResponseDTO> getAllEmployeeCareerPackages() {
         List<EmployeeCareerPackage> employeeCareerPackages = employeeCareerPackageRepository.findAll();
@@ -40,17 +42,18 @@ public class EmployeeCareerPackageService {
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackage);
     }
 
-    public EmployeeCareerPackageResponseDTO createEmployeeCareerPackage(EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) {
+    public EmployeeCareerPackageResponseDTO createEmployeeCareerPackage(EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) throws Exception {
         EmployeeCareerPackage employeeCareerPackage = employeeCareerPackageMapper.toEmployeeCareerPackage(employeeCareerPackageRequestDTO);
-
+        employeeCareerPackage.setFileId(fileService.addFile(employeeCareerPackageRequestDTO.getFile()));
+        employeeCareerPackage.setSubmission_date(new Date());
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackageRepository.save(employeeCareerPackage));
     }
 
-    public EmployeeCareerPackageResponseDTO updateEmployeeCareerPackage(UUID packageId,  EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) {
+    public EmployeeCareerPackageResponseDTO updateEmployeeCareerPackage(UUID packageId,  EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) throws Exception {
         EmployeeCareerPackage employeeCareerPackage = employeeCareerPackageRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE , packageId));
 
-        employeeCareerPackage.setFileId(employeeCareerPackageRequestDTO.getFileId());
+        employeeCareerPackage.setFileId(fileService.addFile(employeeCareerPackageRequestDTO.getFile()));
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackageRepository.save(employeeCareerPackage));
     }
 

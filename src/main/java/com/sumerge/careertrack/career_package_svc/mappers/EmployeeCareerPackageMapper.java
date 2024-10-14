@@ -11,14 +11,16 @@ public interface EmployeeCareerPackageMapper {
 
     @Mapping(target = "id" , ignore = true)
     @Mapping(source = "employeeId", target = "employeeId")
-    @Mapping(source = "url", target = "url")
+    @Mapping(target = "fileId" , ignore = true)
+    @Mapping( target = "submission_date" , ignore = true)
     @Mapping(target = "comment" , ignore = true)
     @Mapping(target = "approvalStatus" , ignore = true)
     EmployeeCareerPackage toEmployeeCareerPackage(EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "employeeId", target = "employeeId")
-    @Mapping(source = "url", target = "url")
+    @Mapping(source = "fileId", target = "fileId")
+    @Mapping(source = "submission_date", target = "submission_date")
     @Mapping(source = "comment", target = "comment")
     @Mapping(source = "approvalStatus", target = "approvalStatus")
     EmployeeCareerPackageResponseDTO toEmployeeCareerPackageResponseDTO(EmployeeCareerPackage employeeCareerPackage);

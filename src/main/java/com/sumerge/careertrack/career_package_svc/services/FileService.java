@@ -4,6 +4,7 @@ import com.sumerge.careertrack.career_package_svc.entities.LoadFile;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import com.sumerge.careertrack.career_package_svc.exceptions.DoesNotExistException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -34,14 +35,14 @@ public class FileService {
     }
 
 
-    public LoadFile downloadFile(String id) throws IOException {
+    public LoadFile downloadFile(String id) throws Exception {
 
         GridFSFile gridFSFile = template.findOne( new Query(Criteria.where("_id").is(id)) );
 
         LoadFile loadFile = new LoadFile();
 
         if (gridFSFile != null && gridFSFile.getMetadata() != null) {
-            loadFile.setFilename( gridFSFile.getFilename() );
+            loadFile.setFileName( gridFSFile.getFilename() );
 
             loadFile.setFileType( gridFSFile.getMetadata().get("_contentType").toString() );
 
@@ -49,6 +50,7 @@ public class FileService {
 
             loadFile.setFile( IOUtils.toByteArray(operations.getResource(gridFSFile).getInputStream()) );
         }
+        else throw new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE , id);
 
         return loadFile;
     }

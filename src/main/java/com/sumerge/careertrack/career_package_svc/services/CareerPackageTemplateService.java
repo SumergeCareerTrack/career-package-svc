@@ -10,6 +10,7 @@ import com.sumerge.careertrack.career_package_svc.repositories.CareerPackageTemp
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class CareerPackageTemplateService {
 
     private final CareerPackageTemplateRepository careerPackageTemplateRepository;
     private final CareerPackageTemplateMapper careerPackageTemplateMapper;
+    private final FileService fileService;
 
     public List<CareerPackageTemplateResponseDTO> getAllCareerPackages() {
         List<CareerPackageTemplate> careerPackages = careerPackageTemplateRepository.findAll();
@@ -38,15 +40,17 @@ public class CareerPackageTemplateService {
         return careerPackageTemplateMapper.toResponseDTO(careerPackage);
     }
 
-    public CareerPackageTemplateResponseDTO createCareerPackage(CareerPackageTemplateRequestDTO requestDTO) {
+    public CareerPackageTemplateResponseDTO createCareerPackage(CareerPackageTemplateRequestDTO requestDTO) throws IOException {
         CareerPackageTemplate template = careerPackageTemplateMapper.toCarerPackageTemplate(requestDTO);
         if(careerPackageTemplateRepository.existsByTitleId(template.getTitleId())){
             throw new AlreadyExistException(AlreadyExistException.Title , template.getTitleId());
         }
+        System.out.println("TOUCHED");
+        template.setFileId(fileService.addFile(requestDTO.getFile()));
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));
     }
 
-    public CareerPackageTemplateResponseDTO updateCareerPackage( UUID packageId,CareerPackageTemplateRequestDTO requestDTO) {
+    public CareerPackageTemplateResponseDTO updateCareerPackage( UUID packageId,CareerPackageTemplateRequestDTO requestDTO) throws IOException {
         CareerPackageTemplate template = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, packageId));
 
@@ -54,7 +58,7 @@ public class CareerPackageTemplateService {
             throw new AlreadyExistException(AlreadyExistException.Title , requestDTO.getTitleId());
         }
 
-        template.setFileId(requestDTO.getFileId());
+        template.setFileId(fileService.addFile(requestDTO.getFile()));
         template.setTitleId(requestDTO.getTitleId());
 
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));

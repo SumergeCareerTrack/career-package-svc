@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@CrossOrigin
+@CrossOrigin(exposedHeaders = "Content-Disposition")
 @RequiredArgsConstructor
 @RequestMapping("/file")
 @RestController
@@ -27,12 +27,11 @@ public class FileController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<?> downloadFile(@PathVariable String id) throws IOException {
+    public ResponseEntity<?> downloadFile(@PathVariable String id) throws Exception {
         LoadFile loadFile = fileService.downloadFile(id);
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(loadFile.getFileType() ))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + loadFile.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + loadFile.getFileName() + "\"")
                 .body(new ByteArrayResource(loadFile.getFile()));
     }
 
