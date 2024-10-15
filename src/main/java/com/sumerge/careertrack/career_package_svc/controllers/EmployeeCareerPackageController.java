@@ -41,11 +41,12 @@ public class EmployeeCareerPackageController {
         return ResponseEntity.ok(employeeCareerPackageService.getAllSubordinateEmployeeCareerPackages(subordinateEmployeeIds));
     }
 
-    @PostMapping
+    @PostMapping("/{managerId}")
     public ResponseEntity<EmployeeCareerPackageResponseDTO> createEmployeeCareerPackage(@RequestParam MultipartFile file ,
-                                                                                        @RequestParam UUID employeeId) throws Exception {
+                                                                                        @RequestParam UUID employeeId,
+                                                                                        @PathVariable String managerId) throws Exception {
         EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeeId,file);
-        return ResponseEntity.ok(employeeCareerPackageService.createEmployeeCareerPackage(requestDTO));
+        return ResponseEntity.ok(employeeCareerPackageService.createEmployeeCareerPackage(requestDTO,managerId));
     }
 
     @PutMapping("/{employeePackageId}")
@@ -60,13 +61,13 @@ public class EmployeeCareerPackageController {
         return ResponseEntity.ok(employeeCareerPackageService.deleteEmployeeCareerPackage(employeePackageId));
     }
 
-    @PutMapping("/{employeePackageId}/approve")
-    public ResponseEntity<EmployeeCareerPackageResponseDTO> approveEmployeeCareerPackage(@PathVariable UUID employeePackageId , @RequestBody String comment) {
-        return ResponseEntity.ok(employeeCareerPackageService.approveEmployeeCareerPackage(employeePackageId , comment));
+    @PutMapping("/{employeePackageId}/approve/{managerId}")
+    public ResponseEntity<EmployeeCareerPackageResponseDTO> approveEmployeeCareerPackage(@PathVariable UUID employeePackageId , @RequestBody String comment,@PathVariable String managerId) {
+        return ResponseEntity.ok(employeeCareerPackageService.approveEmployeeCareerPackage(employeePackageId , comment,managerId));
     }
 
-    @PutMapping("/{employeePackageId}/reject")
-    public ResponseEntity<EmployeeCareerPackageResponseDTO> rejectEmployeeCareerPackage(@PathVariable UUID employeePackageId , @RequestBody String comment) {
-        return ResponseEntity.ok(employeeCareerPackageService.rejectEmployeeCareerPackage(employeePackageId , comment));
+    @PutMapping("/{employeePackageId}/reject/{managerId}")
+    public ResponseEntity<EmployeeCareerPackageResponseDTO> rejectEmployeeCareerPackage(@PathVariable UUID employeePackageId , @RequestBody String comment,@PathVariable String managerId) {
+        return ResponseEntity.ok(employeeCareerPackageService.rejectEmployeeCareerPackage(employeePackageId , comment,managerId));
     }
 }
