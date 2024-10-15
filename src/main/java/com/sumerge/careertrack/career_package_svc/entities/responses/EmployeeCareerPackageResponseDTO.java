@@ -22,7 +22,7 @@ public class EmployeeCareerPackageResponseDTO {
     private String fileId;
 
     @NonNull
-    private Date submission_date;
+    private Date submissionDate;
 
     @NonNull
     private String comment;

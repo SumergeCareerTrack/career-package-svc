@@ -23,4 +23,7 @@ public class CareerPackageTemplate {
     @Column(nullable = false)
     private UUID titleId;
 
+    @Column(nullable = false)
+    private String name;
+
 }

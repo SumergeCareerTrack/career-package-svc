@@ -19,4 +19,7 @@ public class CareerPackageTemplateResponseDTO {
 
     @NonNull
     private UUID titleId;
+
+    @NonNull
+    private String name;
 }

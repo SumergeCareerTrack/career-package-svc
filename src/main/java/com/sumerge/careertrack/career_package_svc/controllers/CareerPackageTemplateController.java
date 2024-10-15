@@ -37,8 +37,10 @@ public class CareerPackageTemplateController {
     }
 
     @PostMapping
-    public ResponseEntity<CareerPackageTemplateResponseDTO> createCareerPackage(@RequestParam MultipartFile file , @RequestParam UUID titleId) throws IOException {
-        CareerPackageTemplateRequestDTO requestDTO = new CareerPackageTemplateRequestDTO(file, titleId);
+    public ResponseEntity<CareerPackageTemplateResponseDTO> createCareerPackage(@RequestParam MultipartFile file
+                                                                                , @RequestParam UUID titleId
+                                                                                , @RequestParam String name) throws IOException {
+        CareerPackageTemplateRequestDTO requestDTO = new CareerPackageTemplateRequestDTO(file, titleId , name);
         return ResponseEntity.ok(careerPackageTemplateService.createCareerPackage(requestDTO));
     }
 

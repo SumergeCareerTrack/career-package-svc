@@ -35,17 +35,15 @@ public class EmployeeCareerPackageService {
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackage);
     }
 
-    public EmployeeCareerPackageResponseDTO getEmployeeCareerPackageByEmployeeId(UUID id) {
-        EmployeeCareerPackage employeeCareerPackage = employeeCareerPackageRepository.findByEmployeeId(id)
-                .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.Employee , id));
-
-        return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackage);
+    public List<EmployeeCareerPackageResponseDTO> getEmployeeCareerPackageByEmployeeId(UUID id) {
+        List<EmployeeCareerPackage> employeeCareerPackages = employeeCareerPackageRepository.findAllByEmployeeIdOrderBySubmissionDateAsc(id);
+        return employeeCareerPackageMapper.toResponseDTOList(employeeCareerPackages);
     }
 
     public EmployeeCareerPackageResponseDTO createEmployeeCareerPackage(EmployeeCareerPackageRequestDTO employeeCareerPackageRequestDTO) throws Exception {
         EmployeeCareerPackage employeeCareerPackage = employeeCareerPackageMapper.toEmployeeCareerPackage(employeeCareerPackageRequestDTO);
         employeeCareerPackage.setFileId(fileService.addFile(employeeCareerPackageRequestDTO.getFile()));
-        employeeCareerPackage.setSubmission_date(new Date());
+        employeeCareerPackage.setSubmissionDate(new Date());
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackageRepository.save(employeeCareerPackage));
     }
 

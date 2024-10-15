@@ -11,11 +11,13 @@ public interface CareerPackageTemplateMapper {
 
     @Mapping(target = "fileId" , ignore = true)
     @Mapping(source = "titleId" , target = "titleId")
+    @Mapping(source = "name", target = "name")
     @Mapping(target = "id" , ignore = true)
     CareerPackageTemplate toCarerPackageTemplate(CareerPackageTemplateRequestDTO templateRequestDTO);
 
     @Mapping(source = "fileId" , target = "fileId")
     @Mapping(source = "titleId" , target = "titleId")
+    @Mapping(source = "name" , target = "name")
     @Mapping(source = "id" ,target = "id")
     CareerPackageTemplateResponseDTO toResponseDTO(CareerPackageTemplate template);
 }

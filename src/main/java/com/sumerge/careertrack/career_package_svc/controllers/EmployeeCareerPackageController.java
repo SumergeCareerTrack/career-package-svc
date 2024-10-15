@@ -32,7 +32,7 @@ public class EmployeeCareerPackageController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<EmployeeCareerPackageResponseDTO> getEmployeeCareerPackageByEmployeeId(@PathVariable UUID employeeId) {
+    public ResponseEntity<List<EmployeeCareerPackageResponseDTO>> getEmployeeCareerPackageByEmployeeId(@PathVariable UUID employeeId) {
         return ResponseEntity.ok(employeeCareerPackageService.getEmployeeCareerPackageByEmployeeId(employeeId));
     }
 

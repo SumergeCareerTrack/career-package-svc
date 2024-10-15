@@ -17,4 +17,8 @@ public class CareerPackageTemplateRequestDTO {
 
     @NonNull
     private UUID titleId;
+
+    @NonNull
+    private String name;
+
 }

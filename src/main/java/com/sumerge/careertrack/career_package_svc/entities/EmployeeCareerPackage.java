@@ -32,7 +32,7 @@ public class EmployeeCareerPackage {
     private String comment = "";
 
     @Column(nullable = false)
-    private Date submission_date;
+    private Date submissionDate;
 
     @Column(nullable = false)
     @Builder.Default
