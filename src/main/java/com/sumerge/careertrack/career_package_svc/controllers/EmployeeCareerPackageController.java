@@ -36,6 +36,11 @@ public class EmployeeCareerPackageController {
         return ResponseEntity.ok(employeeCareerPackageService.getEmployeeCareerPackageByEmployeeId(employeeId));
     }
 
+    @PostMapping("/manager/{employeeId}")
+    public ResponseEntity<List<EmployeeCareerPackageResponseDTO>> getAllSubordinateEmployeeCareerPackages(@PathVariable UUID employeeId , @RequestBody List<UUID> subordinateEmployeeIds) {
+        return ResponseEntity.ok(employeeCareerPackageService.getAllSubordinateEmployeeCareerPackages(subordinateEmployeeIds));
+    }
+
     @PostMapping
     public ResponseEntity<EmployeeCareerPackageResponseDTO> createEmployeeCareerPackage(@RequestParam MultipartFile file ,
                                                                                         @RequestParam UUID employeeId) throws Exception {

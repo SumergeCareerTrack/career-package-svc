@@ -83,4 +83,9 @@ public class EmployeeCareerPackageService {
 
         return employeeCareerPackageMapper.toEmployeeCareerPackageResponseDTO(employeeCareerPackageRepository.save(employeeCareerPackage));
     }
+
+    public List<EmployeeCareerPackageResponseDTO> getAllSubordinateEmployeeCareerPackages(List<UUID> employeeIds){
+      List<EmployeeCareerPackage> careerPackages =  employeeCareerPackageRepository.findLatestSubmissionsByEmployeeIds(employeeIds);
+      return employeeCareerPackageMapper.toResponseDTOList(careerPackages);
+    }
 }
