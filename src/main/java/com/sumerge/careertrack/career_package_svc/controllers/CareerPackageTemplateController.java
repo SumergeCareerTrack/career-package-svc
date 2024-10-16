@@ -4,6 +4,8 @@ import com.sumerge.careertrack.career_package_svc.entities.requests.CareerPackag
 import com.sumerge.careertrack.career_package_svc.entities.responses.CareerPackageTemplateResponseDTO;
 import com.sumerge.careertrack.career_package_svc.services.CareerPackageTemplateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +24,18 @@ public class CareerPackageTemplateController {
     private final CareerPackageTemplateService careerPackageTemplateService;
 
     @GetMapping
-    public ResponseEntity<List<CareerPackageTemplateResponseDTO>> getAll() {
-        return ResponseEntity.ok(careerPackageTemplateService.getAllCareerPackages());
+    public ResponseEntity<List<CareerPackageTemplateResponseDTO>> getAllCareerPackages(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        if (page == null || size == null || size == 0) {
+            // Fetch all career packages without pagination
+            return ResponseEntity.ok(careerPackageTemplateService.getAllCareerPackages());
+        } else {
+            // Paginated fetch
+            Pageable pageable = PageRequest.of(page, size);
+            return ResponseEntity.ok(careerPackageTemplateService.getAllCareerPackages(pageable));
+        }
     }
 
     @GetMapping("/{packageId}")
