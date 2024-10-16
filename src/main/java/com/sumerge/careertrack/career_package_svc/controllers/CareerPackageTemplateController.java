@@ -29,10 +29,9 @@ public class CareerPackageTemplateController {
             @RequestParam(required = false) Integer size) {
 
         if (page == null || size == null || size == 0) {
-            // Fetch all career packages without pagination
+
             return ResponseEntity.ok(careerPackageTemplateService.getAllCareerPackages());
         } else {
-            // Paginated fetch
             Pageable pageable = PageRequest.of(page, size);
             return ResponseEntity.ok(careerPackageTemplateService.getAllCareerPackages(pageable));
         }
@@ -62,7 +61,7 @@ public class CareerPackageTemplateController {
     }
 
     @DeleteMapping("/{packageId}")
-    public ResponseEntity<String> deleteCareerPackage(@PathVariable UUID packageId) {
+    public ResponseEntity<?> deleteCareerPackage(@PathVariable UUID packageId) {
         return ResponseEntity.ok(careerPackageTemplateService.deleteCareerPackage(packageId));
     }
 }

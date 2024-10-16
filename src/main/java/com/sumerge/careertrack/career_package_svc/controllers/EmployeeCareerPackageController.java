@@ -29,10 +29,8 @@ public class EmployeeCareerPackageController {
             @RequestParam(required = false) Integer size) {
 
         if (page == null || size == null || size == 0) {
-            // Fetch all employee career packages without pagination
             return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages());
         } else {
-            // Paginated fetch
             Pageable pageable = PageRequest.of(page, size);
             return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages(pageable));
         }
