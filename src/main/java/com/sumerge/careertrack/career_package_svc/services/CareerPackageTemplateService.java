@@ -8,6 +8,8 @@ import com.sumerge.careertrack.career_package_svc.exceptions.DoesNotExistExcepti
 import com.sumerge.careertrack.career_package_svc.mappers.CareerPackageTemplateMapper;
 import com.sumerge.careertrack.career_package_svc.repositories.CareerPackageTemplateRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,6 +28,12 @@ public class CareerPackageTemplateService {
     public List<CareerPackageTemplateResponseDTO> getAllCareerPackages() {
         List<CareerPackageTemplate> careerPackages = careerPackageTemplateRepository.findAll();
         return careerPackages.stream().map(careerPackageTemplateMapper::toResponseDTO).collect(Collectors.toList());
+    }
+    public List<CareerPackageTemplateResponseDTO> getAllCareerPackages(Pageable pageable) {
+        Page<CareerPackageTemplate> paginatedCareerPackages = careerPackageTemplateRepository.findAll(pageable);
+        return paginatedCareerPackages.getContent().stream()
+                .map(careerPackageTemplateMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public CareerPackageTemplateResponseDTO findCareerPackageById(UUID id) {

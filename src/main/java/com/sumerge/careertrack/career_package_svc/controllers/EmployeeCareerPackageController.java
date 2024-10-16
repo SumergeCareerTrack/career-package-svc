@@ -4,6 +4,8 @@ import com.sumerge.careertrack.career_package_svc.entities.requests.EmployeeCare
 import com.sumerge.careertrack.career_package_svc.entities.responses.EmployeeCareerPackageResponseDTO;
 import com.sumerge.careertrack.career_package_svc.services.EmployeeCareerPackageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,19 @@ public class EmployeeCareerPackageController {
     private final EmployeeCareerPackageService employeeCareerPackageService;
 
     @GetMapping
-    public ResponseEntity<List<EmployeeCareerPackageResponseDTO>> getAllEmployeeCareerPackages() {
-        return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages());
-    }
+    public ResponseEntity<List<EmployeeCareerPackageResponseDTO>> getAllEmployeeCareerPackages(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
 
+        if (page == null || size == null || size == 0) {
+            // Fetch all employee career packages without pagination
+            return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages());
+        } else {
+            // Paginated fetch
+            Pageable pageable = PageRequest.of(page, size);
+            return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages(pageable));
+        }
+    }
     @GetMapping("/{employeePackageId}")
     public ResponseEntity<EmployeeCareerPackageResponseDTO> getEmployeeCareerPackageById(@PathVariable UUID employeePackageId) {
         return ResponseEntity.ok(employeeCareerPackageService.getEmployeeCareerPackageByPackageId(employeePackageId));
