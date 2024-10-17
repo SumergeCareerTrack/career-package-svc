@@ -29,6 +29,7 @@ public class CareerPackageTemplateService {
         List<CareerPackageTemplate> careerPackages = careerPackageTemplateRepository.findAll();
         return careerPackages.stream().map(careerPackageTemplateMapper::toResponseDTO).collect(Collectors.toList());
     }
+
     public List<CareerPackageTemplateResponseDTO> getAllCareerPackages(Pageable pageable) {
         Page<CareerPackageTemplate> paginatedCareerPackages = careerPackageTemplateRepository.findAll(pageable);
         return paginatedCareerPackages.getContent().stream()
@@ -61,14 +62,11 @@ public class CareerPackageTemplateService {
     public CareerPackageTemplateResponseDTO updateCareerPackage( UUID packageId,CareerPackageTemplateRequestDTO requestDTO) throws IOException {
         CareerPackageTemplate template = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, packageId));
-
-        if(careerPackageTemplateRepository.existsByTitleId(requestDTO.getTitleId())){
-            throw new AlreadyExistException(AlreadyExistException.Title , requestDTO.getTitleId());
+        if(requestDTO.getFile() != null){
+            fileService.deleteFile(template.getFileId());
+            template.setFileId(fileService.addFile(requestDTO.getFile()));
         }
-
-        template.setFileId(fileService.addFile(requestDTO.getFile()));
-        template.setTitleId(requestDTO.getTitleId());
-
+        careerPackageTemplateMapper.updateCareerPackageTemplateFromDto(requestDTO ,template);
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));
     }
 

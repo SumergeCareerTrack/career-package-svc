@@ -16,5 +16,8 @@ public class EmployeeCareerPackageRequestDTO {
     private UUID employeeId;
 
     @NonNull
+    private String title;
+
+    @NonNull
     private MultipartFile file;
 }

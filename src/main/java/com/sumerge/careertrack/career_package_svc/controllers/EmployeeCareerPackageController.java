@@ -29,10 +29,8 @@ public class EmployeeCareerPackageController {
             @RequestParam(required = false) Integer size) {
 
         if (page == null || size == null || size == 0) {
-            // Fetch all employee career packages without pagination
             return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages());
         } else {
-            // Paginated fetch
             Pageable pageable = PageRequest.of(page, size);
             return ResponseEntity.ok(employeeCareerPackageService.getAllEmployeeCareerPackages(pageable));
         }
@@ -55,15 +53,17 @@ public class EmployeeCareerPackageController {
     @PostMapping("/{managerId}")
     public ResponseEntity<EmployeeCareerPackageResponseDTO> createEmployeeCareerPackage(@RequestParam MultipartFile file ,
                                                                                         @RequestParam UUID employeeId,
+                                                                                        @RequestParam String name,
                                                                                         @PathVariable String managerId) throws Exception {
-        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeeId,file);
+        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeeId,name,file);
         return ResponseEntity.ok(employeeCareerPackageService.createEmployeeCareerPackage(requestDTO,managerId));
     }
 
     @PutMapping("/{employeePackageId}")
     public ResponseEntity<EmployeeCareerPackageResponseDTO> updateEmployeeCareerPackage(@PathVariable UUID employeePackageId,
+                                                                                        @RequestParam String name,
                                                                                         @RequestParam MultipartFile file) throws Exception{
-        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeePackageId,file);
+        EmployeeCareerPackageRequestDTO requestDTO = new EmployeeCareerPackageRequestDTO(employeePackageId,name,file);
         return ResponseEntity.ok(employeeCareerPackageService.updateEmployeeCareerPackage(employeePackageId , requestDTO));
     }
 

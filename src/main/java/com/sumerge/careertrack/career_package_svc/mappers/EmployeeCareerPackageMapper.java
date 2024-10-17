@@ -13,6 +13,7 @@ public interface EmployeeCareerPackageMapper {
 
     @Mapping(target = "id" , ignore = true)
     @Mapping(source = "employeeId", target = "employeeId")
+    @Mapping(source = "title", target = "title")
     @Mapping(target = "fileId" , ignore = true)
     @Mapping( target = "submissionDate" , ignore = true)
     @Mapping(target = "comment" , ignore = true)
@@ -21,6 +22,7 @@ public interface EmployeeCareerPackageMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "employeeId", target = "employeeId")
+    @Mapping(source = "title", target = "title")
     @Mapping(source = "fileId", target = "fileId")
     @Mapping(source = "submissionDate", target = "submissionDate")
     @Mapping(source = "comment", target = "comment")

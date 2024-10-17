@@ -38,4 +38,6 @@ public class EmployeeCareerPackage {
     @Builder.Default
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
+    @Column(nullable = false)
+    private String title;
 }
