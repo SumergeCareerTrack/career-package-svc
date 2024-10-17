@@ -56,8 +56,8 @@ public class CareerPackageTemplateController {
     }
 
     @PutMapping("/{packageId}")
-    public ResponseEntity<CareerPackageTemplateResponseDTO> updateCareerPackage(@PathVariable UUID packageId, @RequestParam MultipartFile file
-                                                                                                            , @RequestParam String name) throws IOException {
+    public ResponseEntity<CareerPackageTemplateResponseDTO> updateCareerPackage(@PathVariable UUID packageId, @RequestParam(required = false) MultipartFile file
+                                                                                                            , @RequestParam(required = false) String name) throws IOException {
         CareerPackageTemplateRequestDTO requestDTO = new CareerPackageTemplateRequestDTO();
         requestDTO.setFile(file);
         requestDTO.setName(name);

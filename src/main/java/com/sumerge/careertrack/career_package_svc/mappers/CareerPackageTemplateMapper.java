@@ -3,8 +3,7 @@ package com.sumerge.careertrack.career_package_svc.mappers;
 import com.sumerge.careertrack.career_package_svc.entities.CareerPackageTemplate;
 import com.sumerge.careertrack.career_package_svc.entities.requests.CareerPackageTemplateRequestDTO;
 import com.sumerge.careertrack.career_package_svc.entities.responses.CareerPackageTemplateResponseDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface CareerPackageTemplateMapper {
@@ -20,4 +19,9 @@ public interface CareerPackageTemplateMapper {
     @Mapping(source = "name" , target = "name")
     @Mapping(source = "id" ,target = "id")
     CareerPackageTemplateResponseDTO toResponseDTO(CareerPackageTemplate template);
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateCareerPackageTemplateFromDto(CareerPackageTemplateRequestDTO dto,
+                                           @MappingTarget CareerPackageTemplate entity);
 }

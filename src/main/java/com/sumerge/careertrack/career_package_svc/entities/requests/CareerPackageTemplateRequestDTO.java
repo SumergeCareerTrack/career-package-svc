@@ -12,13 +12,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CareerPackageTemplateRequestDTO {
 
-    @NonNull
     private MultipartFile file;
 
-    @NonNull
     private UUID titleId;
 
-    @NonNull
     private String name;
 
 }

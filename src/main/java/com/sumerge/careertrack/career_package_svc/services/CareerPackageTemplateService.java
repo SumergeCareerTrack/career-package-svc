@@ -61,10 +61,10 @@ public class CareerPackageTemplateService {
     public CareerPackageTemplateResponseDTO updateCareerPackage( UUID packageId,CareerPackageTemplateRequestDTO requestDTO) throws IOException {
         CareerPackageTemplate template = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, packageId));
-
-        template.setFileId(fileService.addFile(requestDTO.getFile()));
-        template.setName(requestDTO.getName());
-
+        if(requestDTO.getFile() != null){
+            template.setFileId(fileService.addFile(requestDTO.getFile()));
+        }
+        careerPackageTemplateMapper.updateCareerPackageTemplateFromDto(requestDTO ,template);
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));
     }
 
