@@ -29,4 +29,7 @@ public class EmployeeCareerPackageResponseDTO {
 
     @NonNull
     private ApprovalStatus approvalStatus;
+
+    @NonNull
+    private String title;
 }

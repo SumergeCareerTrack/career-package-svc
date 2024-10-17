@@ -54,12 +54,8 @@ public class CareerPackageTemplateService {
         CareerPackageTemplate template = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, packageId));
 
-        if(careerPackageTemplateRepository.existsByTitleId(requestDTO.getTitleId())){
-            throw new AlreadyExistException(AlreadyExistException.Title , requestDTO.getTitleId());
-        }
-
         template.setFileId(fileService.addFile(requestDTO.getFile()));
-        template.setTitleId(requestDTO.getTitleId());
+        template.setName(requestDTO.getName());
 
         return careerPackageTemplateMapper.toResponseDTO(careerPackageTemplateRepository.save(template));
     }
