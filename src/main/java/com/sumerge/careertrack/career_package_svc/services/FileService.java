@@ -35,6 +35,16 @@ public class FileService {
     }
 
 
+    public void deleteFile(String id) throws DoesNotExistException {
+        GridFSFile gridFSFile = template.findOne(new Query(Criteria.where("_id").is(id)));
+
+        if (gridFSFile != null) {
+            template.delete(new Query(Criteria.where("_id").is(id)));
+        } else {
+            throw new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, id);
+        }
+    }
+
     public LoadFile downloadFile(String id) throws Exception {
 
         GridFSFile gridFSFile = template.findOne( new Query(Criteria.where("_id").is(id)) );

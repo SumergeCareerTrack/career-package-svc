@@ -29,6 +29,7 @@ public class CareerPackageTemplateService {
         List<CareerPackageTemplate> careerPackages = careerPackageTemplateRepository.findAll();
         return careerPackages.stream().map(careerPackageTemplateMapper::toResponseDTO).collect(Collectors.toList());
     }
+
     public List<CareerPackageTemplateResponseDTO> getAllCareerPackages(Pageable pageable) {
         Page<CareerPackageTemplate> paginatedCareerPackages = careerPackageTemplateRepository.findAll(pageable);
         return paginatedCareerPackages.getContent().stream()
@@ -62,6 +63,7 @@ public class CareerPackageTemplateService {
         CareerPackageTemplate template = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new DoesNotExistException(DoesNotExistException.CAREER_PACKAGE, packageId));
         if(requestDTO.getFile() != null){
+            fileService.deleteFile(template.getFileId());
             template.setFileId(fileService.addFile(requestDTO.getFile()));
         }
         careerPackageTemplateMapper.updateCareerPackageTemplateFromDto(requestDTO ,template);

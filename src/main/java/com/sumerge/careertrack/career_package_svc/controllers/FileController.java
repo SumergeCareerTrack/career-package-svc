@@ -35,4 +35,10 @@ public class FileController {
                 .body(new ByteArrayResource(loadFile.getFile()));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String > deleteFile(@PathVariable String id) throws Exception {
+        fileService.deleteFile(id);
+        return ResponseEntity.ok("Deleted File Successfully");
+    }
+
 }
