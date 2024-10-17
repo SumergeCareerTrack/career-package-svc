@@ -1,4 +1,4 @@
-package com.sumerge.careertrack.wiki_svc.repositories;
+package com.sumerge.careertrack.career_package_svc.repositories;
 
 import java.util.UUID;
 

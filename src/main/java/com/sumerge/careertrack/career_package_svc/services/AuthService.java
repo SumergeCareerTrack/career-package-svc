@@ -1,10 +1,10 @@
-package com.sumerge.careertrack.wiki_svc.services;
+package com.sumerge.careertrack.career_package_svc.services;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.sumerge.careertrack.wiki_svc.repositories.UserTokenRepository;
+import com.sumerge.careertrack.career_package_svc.repositories.UserTokenRepository;
 
 import lombok.RequiredArgsConstructor;
 
