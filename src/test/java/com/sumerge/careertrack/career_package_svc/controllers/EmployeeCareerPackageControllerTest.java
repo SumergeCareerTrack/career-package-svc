@@ -4,32 +4,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sumerge.careertrack.career_package_svc.entities.requests.EmployeeCareerPackageRequestDTO;
 import com.sumerge.careertrack.career_package_svc.entities.responses.EmployeeCareerPackageResponseDTO;
 import com.sumerge.careertrack.career_package_svc.exceptions.DoesNotExistException;
+import com.sumerge.careertrack.career_package_svc.exceptions.GlobalExceptionHandler;
 import com.sumerge.careertrack.career_package_svc.services.EmployeeCareerPackageService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(EmployeeCareerPackageController.class)
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(value = EmployeeCareerPackageController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@ContextConfiguration(classes = EmployeeCareerPackageController.class)
+@Import(GlobalExceptionHandler.class)
 @AutoConfigureMockMvc(addFilters = false)
 class EmployeeCareerPackageControllerTest {
 
@@ -179,54 +180,103 @@ class EmployeeCareerPackageControllerTest {
         verify(employeeCareerPackageService, times(1)).deleteEmployeeCareerPackage(id);
     }
 
-//
-//    @Test
-//    void updateEmployeeCareerPackageById_Successful() throws Exception {
-//        UUID id = UUID.randomUUID();
-//        EmployeeCareerPackageResponseDTO resp = new EmployeeCareerPackageResponseDTO();
-//        resp.setId(id);
-//
-//    }
+    @Test
+    void createEmployeeCareerPackage_Success() throws Exception {
+        UUID managerId = UUID.randomUUID();
+        MockMultipartFile file = new MockMultipartFile("file", "filename.txt", "text/plain", "some content".getBytes());
 
-//    @Test
-//    void updateEmployeeCareerPackageById_NotFound() throws Exception {
-//        UUID id = UUID.randomUUID();
-//
-//        String fileContent = "test"; // Your file content
-//        String encodedFile = Base64.getEncoder().encodeToString(fileContent.getBytes(StandardCharsets.UTF_8));
-//        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
-//        when(employeeCareerPackageService.updateEmployeeCareerPackage(id,req))
-//                .thenThrow(DoesNotExistException.class);
-//
-//        mockMvc.perform(multipart("/employee-packages/" + id)
-//                        .param("name" , "name")
-//                        .param("file" , encodedFile)
-//                .contentType(MediaType.MULTIPART_FORM_DATA)) // Set content type
-//                .andExpect(status().isNotFound());
-//
-//        verify(employeeCareerPackageService, times(1)).updateEmployeeCareerPackage(id,req);
-//
-//    }
+        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
+        req.setEmployeeId(UUID.randomUUID());
+        req.setFile(file);
+        req.setTitle(UUID.randomUUID().toString());
 
-//    @Test
-//    void testUpdateEmployeeCareerPackage() throws Exception {
-//        UUID employeePackageId = UUID.randomUUID();
-//        String name = "Updated Package";
-//        MockMultipartFile file = new MockMultipartFile("file", "filename.txt", "text/plain", "some content".getBytes());
-//        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
-//        req.setEmployeeId(employeePackageId);
-//
-//        EmployeeCareerPackageResponseDTO responseDTO = new EmployeeCareerPackageResponseDTO();
-//        responseDTO.setEmployeeId(employeePackageId);
-//        when(employeeCareerPackageService.updateEmployeeCareerPackage(employeePackageId,req))
-//                .thenReturn(responseDTO);
-//
-//        mockMvc.perform(multipart("/employeePackage/" + employeePackageId)
-//                        .file(file)
-//                        .param("name", name)
-//                        .contentType(MediaType.MULTIPART_FORM_DATA))
-//                .andExpect(status().isOk());
-//    }
+        when(employeeCareerPackageService.createEmployeeCareerPackage(any(EmployeeCareerPackageRequestDTO.class), eq(managerId.toString())))
+                .thenReturn(new EmployeeCareerPackageResponseDTO());
+
+        mockMvc.perform(multipart("/employee-packages/" + managerId)
+                        .file(file)
+                        .param("employeeId", UUID.randomUUID().toString())
+                        .param("name", "Employee Name")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk());
+
+        verify(employeeCareerPackageService, times(1)).createEmployeeCareerPackage(any(EmployeeCareerPackageRequestDTO.class), eq(managerId.toString()));
+    }
+
+    @Test
+    void createEmployeeCareerPackage_Not_Successful() throws Exception {
+        UUID managerId = UUID.randomUUID();
+        MockMultipartFile file = new MockMultipartFile("file", "filename.txt", "text/plain", "some content".getBytes());
+
+        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
+        req.setEmployeeId(UUID.randomUUID());
+        req.setFile(file);
+        req.setTitle(UUID.randomUUID().toString());
+
+        when(employeeCareerPackageService.createEmployeeCareerPackage(any(EmployeeCareerPackageRequestDTO.class), eq(managerId.toString())))
+                .thenThrow(DoesNotExistException.class);
+
+        mockMvc.perform(multipart("/employee-packages/" + managerId)
+                        .file(file)
+                        .param("employeeId", UUID.randomUUID().toString())
+                        .param("name", "Employee Name")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isNotFound());
+
+        verify(employeeCareerPackageService, times(1)).createEmployeeCareerPackage(any(EmployeeCareerPackageRequestDTO.class), eq(managerId.toString()));
+    }
+
+    @Test
+    void updateEmployeeCareerPackage_Success() throws Exception {
+        UUID employeePackageId = UUID.randomUUID();
+        MockMultipartFile file = new MockMultipartFile("file", "filename.txt", "text/plain", "updated content".getBytes());
+
+        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
+        req.setEmployeeId(employeePackageId);
+        req.setFile(file);
+        req.setTitle("Updated Name");
+
+        when(employeeCareerPackageService.updateEmployeeCareerPackage(eq(employeePackageId), any(EmployeeCareerPackageRequestDTO.class)))
+                .thenReturn(new EmployeeCareerPackageResponseDTO());
+
+        mockMvc.perform(multipart("/employee-packages/" + employeePackageId)
+                        .file(file)
+                        .param("name", "Updated Name")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .with(request -> {
+                            request.setMethod("PUT");
+                            return request;
+                        }))
+                .andExpect(status().isOk());
+
+        verify(employeeCareerPackageService, times(1)).updateEmployeeCareerPackage(eq(employeePackageId), any(EmployeeCareerPackageRequestDTO.class));
+    }
+
+    @Test
+    void updateEmployeeCareerPackage_Not_Successful() throws Exception {
+        UUID employeePackageId = UUID.randomUUID();
+        MockMultipartFile file = new MockMultipartFile("file", "filename.txt", "text/plain", "updated content".getBytes());
+
+        EmployeeCareerPackageRequestDTO req = new EmployeeCareerPackageRequestDTO();
+        req.setEmployeeId(employeePackageId);
+        req.setFile(file);
+        req.setTitle("Updated Name");
+
+        when(employeeCareerPackageService.updateEmployeeCareerPackage(eq(employeePackageId), any(EmployeeCareerPackageRequestDTO.class)))
+                .thenThrow(DoesNotExistException.class);
+
+        mockMvc.perform(multipart("/employee-packages/" + employeePackageId)
+                        .file(file)
+                        .param("name", "Updated Name")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .with(request -> {
+                            request.setMethod("PUT"); // Explicitly setting the method to PUT
+                            return request;
+                        }))
+                .andExpect(status().isNotFound());
+
+        verify(employeeCareerPackageService, times(1)).updateEmployeeCareerPackage(eq(employeePackageId), any(EmployeeCareerPackageRequestDTO.class));
+    }
 
     @Test
     void approveEmployeeCareerPackageById_Successful() throws Exception {
@@ -283,7 +333,6 @@ class EmployeeCareerPackageControllerTest {
         verify(employeeCareerPackageService, times(1)).rejectEmployeeCareerPackage(package_id,comment,manager_id);
     }
 
-
     @Test
     void rejectEmployeeCareerPackageById_NotFound() throws Exception {
         UUID package_id = UUID.randomUUID();
@@ -300,8 +349,5 @@ class EmployeeCareerPackageControllerTest {
 
         verify(employeeCareerPackageService, times(1)).rejectEmployeeCareerPackage(package_id,comment,manager_id);
     }
-
-
-
 
 }
